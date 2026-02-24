@@ -5,9 +5,9 @@ spring:
   application:
     name: cart-service
   datasource:
-    url: jdbc:postgresql://db.yzquiklehhohpdnhyxic.supabase.co:5432/postgres
-    username: postgres
-    password: shop_veggies_online
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.yzquiklehhohpdnhyxic.supabase.co:5432/postgres}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:shop_veggies_online}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 3
