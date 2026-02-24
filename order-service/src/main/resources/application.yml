@@ -30,4 +30,6 @@ eureka:
   instance:
     hostname: ${REMOTING_HOSTNAME:localhost}
     prefer-ip-address: ${PREFER_IP:true}
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+product-service:
+  url: ${PRODUCT_SERVICE_URL:http://localhost:8082}

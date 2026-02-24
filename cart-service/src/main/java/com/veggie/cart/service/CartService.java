@@ -16,6 +16,9 @@ public class CartService {
     private final CartRepository cartRepository;
     private final org.springframework.web.client.RestTemplate restTemplate;
 
+    @org.springframework.beans.factory.annotation.Value("${product-service.url:http://localhost:8082}")
+    private String productServiceUrl;
+
     public Cart getCartByUserId(Long userId) {
         return cartRepository.findByUserId(userId)
                 .orElseGet(() -> cartRepository.save(Cart.builder().userId(userId).build()));
@@ -25,7 +28,7 @@ public class CartService {
     public Cart addToCart(Long userId, CartItem item) {
         // Fetch current stock from product-service
         com.veggie.cart.dto.ProductDTO product = restTemplate.getForObject(
-                "http://product-service/api/products/" + item.getProductId(),
+                productServiceUrl + "/api/products/" + item.getProductId(),
                 com.veggie.cart.dto.ProductDTO.class);
 
         if (product == null) {

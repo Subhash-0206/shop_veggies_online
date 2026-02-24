@@ -16,6 +16,9 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final org.springframework.web.client.RestTemplate restTemplate;
 
+    @org.springframework.beans.factory.annotation.Value("${product-service.url:http://localhost:8082}")
+    private String productServiceUrl;
+
     public Order placeOrder(Order order) {
         order.setCreatedAt(LocalDateTime.now());
         order.setStatus("PENDING");
@@ -25,7 +28,7 @@ public class OrderService {
             // Deduct stock from product-service
             try {
                 restTemplate.postForEntity(
-                        "http://product-service/api/products/" + item.getProductId() + "/reduce-stock?quantity="
+                        productServiceUrl + "/api/products/" + item.getProductId() + "/reduce-stock?quantity="
                                 + item.getQuantity(),
                         null,
                         Void.class);
@@ -62,7 +65,7 @@ public class OrderService {
                 try {
                     // Use negative quantity to increase stock back
                     restTemplate.postForEntity(
-                            "http://product-service/api/products/" + item.getProductId() + "/reduce-stock?quantity="
+                            productServiceUrl + "/api/products/" + item.getProductId() + "/reduce-stock?quantity="
                                     + (-item.getQuantity()),
                             null,
                             Void.class);
