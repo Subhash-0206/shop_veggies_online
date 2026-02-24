@@ -1,9 +1,11 @@
 package com.veggie.user.service;
 
 import com.veggie.user.model.User;
+import com.veggie.user.model.Address;
 import com.veggie.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,7 +33,6 @@ public class UserService {
     public User updateUser(String email, User updatedUser) {
         User user = getUserByEmail(email);
         user.setName(updatedUser.getName());
-        user.setAddress(updatedUser.getAddress());
         user.setPhone(updatedUser.getPhone());
         return userRepository.save(user);
     }
@@ -48,7 +49,6 @@ public class UserService {
         User user = getUserById(id);
         user.setName(updatedUser.getName());
         user.setEmail(updatedUser.getEmail());
-        user.setAddress(updatedUser.getAddress());
         user.setPhone(updatedUser.getPhone());
         user.setRole(updatedUser.getRole());
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()
@@ -60,5 +60,44 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public void updatePassword(String email, String oldPassword, String newPassword) {
+        User user = getUserByEmail(email);
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new RuntimeException("Invalid old password");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public User addAddress(String email, Address address) {
+        User user = getUserByEmail(email);
+        address.setUser(user);
+        if (user.getAddresses() == null) {
+            user.setAddresses(new java.util.ArrayList<>());
+        }
+        if (address.isDefault()) {
+            user.getAddresses().forEach(a -> a.setDefault(false));
+        } else if (user.getAddresses().isEmpty()) {
+            address.setDefault(true);
+        }
+        user.getAddresses().add(address);
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public User removeAddress(String email, Long addressId) {
+        User user = getUserByEmail(email);
+        user.getAddresses().removeIf(a -> a.getId().equals(addressId));
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public User setDefaultAddress(String email, Long addressId) {
+        User user = getUserByEmail(email);
+        user.getAddresses().forEach(a -> a.setDefault(a.getId().equals(addressId)));
+        return userRepository.save(user);
     }
 }

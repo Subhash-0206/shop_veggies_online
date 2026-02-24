@@ -1,6 +1,7 @@
 package com.veggie.user.controller;
 
 import com.veggie.user.model.User;
+import com.veggie.user.model.Address;
 import com.veggie.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,28 @@ public class UserController {
     @PutMapping("/me")
     public ResponseEntity<User> updateCurrentUser(Authentication authentication, @RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(authentication.getName(), user));
+    }
+
+    @PutMapping("/me/password")
+    public ResponseEntity<Void> updatePassword(Authentication authentication,
+            @RequestBody java.util.Map<String, String> request) {
+        userService.updatePassword(authentication.getName(), request.get("oldPassword"), request.get("newPassword"));
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/me/addresses")
+    public ResponseEntity<User> addAddress(Authentication authentication, @RequestBody Address address) {
+        return ResponseEntity.ok(userService.addAddress(authentication.getName(), address));
+    }
+
+    @DeleteMapping("/me/addresses/{id}")
+    public ResponseEntity<User> removeAddress(Authentication authentication, @PathVariable Long id) {
+        return ResponseEntity.ok(userService.removeAddress(authentication.getName(), id));
+    }
+
+    @PutMapping("/me/addresses/{id}/default")
+    public ResponseEntity<User> setDefaultAddress(Authentication authentication, @PathVariable Long id) {
+        return ResponseEntity.ok(userService.setDefaultAddress(authentication.getName(), id));
     }
 
     @GetMapping("/admin/all")

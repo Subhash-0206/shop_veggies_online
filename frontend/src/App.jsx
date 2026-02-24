@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
+import Profile from './pages/Profile';
 import api from './api/api';
 
 function App() {
@@ -88,6 +89,10 @@ function App() {
                       <span>Admin</span>
                     </Link>
                   )}
+                  <Link to="/profile" className="flex items-center space-x-1 hover:text-primary-600 transition-colors">
+                    <User size={20} />
+                    <span>Profile</span>
+                  </Link>
                   <button onClick={handleLogout} className="flex items-center space-x-1 hover:text-red-600 transition-colors">
                     <LogOut size={20} />
                     <span>Logout</span>
@@ -113,6 +118,7 @@ function App() {
           <Route path="/cart" element={<Cart refreshCart={fetchCartCount} />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </main>
 

@@ -2,6 +2,7 @@ package com.veggie.user.service;
 
 import com.veggie.user.dto.*;
 import com.veggie.user.model.User;
+import com.veggie.user.model.Address;
 import com.veggie.user.repository.UserRepository;
 import com.veggie.user.security.CustomUserDetailsService;
 import com.veggie.user.security.JwtUtil;
@@ -31,9 +32,16 @@ public class AuthService {
                                         .email("admin@veggieshop.com")
                                         .password(passwordEncoder.encode("admin123"))
                                         .role(User.Role.ROLE_ADMIN)
-                                        .address("123 Farm Road, Green City")
                                         .phone("555-0199")
                                         .build();
+                        admin.setAddresses(java.util.List.of(Address.builder()
+                                        .street("123 Farm Road")
+                                        .city("Green City")
+                                        .state("GC")
+                                        .zipCode("12345")
+                                        .isDefault(true)
+                                        .user(admin)
+                                        .build()));
                         userRepository.save(admin);
                 } else {
                         // Ensure password is correct for existing admin
@@ -51,9 +59,16 @@ public class AuthService {
                                         .email(userEmail)
                                         .password(passwordEncoder.encode("QWERqwer@1817"))
                                         .role(User.Role.ROLE_ADMIN)
-                                        .address("Admin Office")
                                         .phone("555-0100")
                                         .build();
+                        userAdmin.setAddresses(java.util.List.of(Address.builder()
+                                        .street("Admin Office")
+                                        .city("Admin City")
+                                        .state("AC")
+                                        .zipCode("00000")
+                                        .isDefault(true)
+                                        .user(userAdmin)
+                                        .build()));
                         userRepository.save(userAdmin);
                 } else {
                         User userAdmin = userRepository.findByEmail(userEmail).get();
@@ -72,9 +87,18 @@ public class AuthService {
                                 .email(request.getEmail())
                                 .password(passwordEncoder.encode(request.getPassword()))
                                 .role(request.getRole() != null ? request.getRole() : User.Role.ROLE_USER)
-                                .address(request.getAddress())
                                 .phone(request.getPhone())
                                 .build();
+                if (request.getAddress() != null && !request.getAddress().isEmpty()) {
+                        user.setAddresses(java.util.List.of(Address.builder()
+                                        .street(request.getAddress())
+                                        .city("Default")
+                                        .state("Default")
+                                        .zipCode("00000")
+                                        .isDefault(true)
+                                        .user(user)
+                                        .build()));
+                }
                 userRepository.save(user);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
                 String token = jwtUtil.generateToken(userDetails, user.getRole().name());

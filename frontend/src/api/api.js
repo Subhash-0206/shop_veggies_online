@@ -21,4 +21,12 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+// User Profile API calls
+export const updateProfile = (userData) => api.put('/users/me', userData);
+export const updatePassword = (passwords) => api.put('/users/me/password', passwords);
+export const addAddress = (address) => api.post('/users/me/addresses', address);
+export const removeAddress = (addressId) => api.delete(`/users/me/addresses/${addressId}`);
+export const setDefaultAddress = (addressId) => api.put(`/users/me/addresses/${addressId}/default`);
+export const getCurrentUser = () => api.get('/users/me');
+
 export default api;

@@ -31,7 +31,9 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    private String address;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Address> addresses;
+
     private String phone;
 
     public enum Role {
