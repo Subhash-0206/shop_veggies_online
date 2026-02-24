@@ -39,7 +39,7 @@ public class AuthService {
                                         .city("Green City")
                                         .state("GC")
                                         .zipCode("12345")
-                                        .isDefault(true)
+                                        .defaultAddress(true)
                                         .user(admin)
                                         .build()));
                         userRepository.save(admin);
@@ -66,7 +66,7 @@ public class AuthService {
                                         .city("Admin City")
                                         .state("AC")
                                         .zipCode("00000")
-                                        .isDefault(true)
+                                        .defaultAddress(true)
                                         .user(userAdmin)
                                         .build()));
                         userRepository.save(userAdmin);
@@ -95,7 +95,7 @@ public class AuthService {
                                         .city("Default")
                                         .state("Default")
                                         .zipCode("00000")
-                                        .isDefault(true)
+                                        .defaultAddress(true)
                                         .user(user)
                                         .build()));
                 }

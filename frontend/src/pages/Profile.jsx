@@ -11,7 +11,7 @@ const Profile = () => {
     // Form states
     const [profileForm, setProfileForm] = useState({ name: '', phone: '' });
     const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '', confirmPassword: '' });
-    const [addressForm, setAddressForm] = useState({ street: '', city: '', state: '', zipCode: '', isDefault: false });
+    const [addressForm, setAddressForm] = useState({ street: '', city: '', state: '', zipCode: '', defaultAddress: false });
     const [showAddressForm, setShowAddressForm] = useState(false);
 
     useEffect(() => {
@@ -69,7 +69,7 @@ const Profile = () => {
         try {
             await addAddress(addressForm);
             showMsg('success', 'Address added successfully!');
-            setAddressForm({ street: '', city: '', state: '', zipCode: '', isDefault: false });
+            setAddressForm({ street: '', city: '', state: '', zipCode: '', defaultAddress: false });
             setShowAddressForm(false);
             fetchProfile();
         } catch (err) {
@@ -238,8 +238,8 @@ const Profile = () => {
                                         <label className="flex items-center space-x-2 cursor-pointer">
                                             <input
                                                 type="checkbox"
-                                                checked={addressForm.isDefault}
-                                                onChange={(e) => setAddressForm({ ...addressForm, isDefault: e.target.checked })}
+                                                checked={addressForm.defaultAddress}
+                                                onChange={(e) => setAddressForm({ ...addressForm, defaultAddress: e.target.checked })}
                                                 className="rounded text-primary-600 focus:ring-primary-500"
                                             />
                                             <span className="text-sm text-gray-600">Set as default address</span>
@@ -255,18 +255,18 @@ const Profile = () => {
                             <div className="space-y-4">
                                 {userData.addresses && userData.addresses.length > 0 ? (
                                     userData.addresses.map((addr) => (
-                                        <div key={addr.id} className={`p-4 rounded-xl border flex justify-between items-start transition-all ${addr.default ? 'border-primary-500 bg-primary-50' : 'border-gray-200 bg-white'}`}>
+                                        <div key={addr.id} className={`p-4 rounded-xl border flex justify-between items-start transition-all ${addr.defaultAddress ? 'border-primary-500 bg-primary-50' : 'border-gray-200 bg-white'}`}>
                                             <div>
                                                 <div className="flex items-center space-x-2 mb-1">
                                                     <p className="font-bold text-gray-800">{addr.street}</p>
-                                                    {addr.default && (
+                                                    {addr.defaultAddress && (
                                                         <span className="bg-primary-600 text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Default</span>
                                                     )}
                                                 </div>
                                                 <p className="text-sm text-gray-500">{addr.city}, {addr.state} {addr.zipCode}</p>
                                             </div>
                                             <div className="flex items-center space-x-3">
-                                                {!addr.default && (
+                                                {!addr.defaultAddress && (
                                                     <button
                                                         onClick={() => handleSetDefault(addr.id)}
                                                         className="text-xs text-primary-600 hover:text-primary-700 font-bold uppercase tracking-tighter"

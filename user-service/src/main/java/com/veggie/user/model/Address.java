@@ -31,7 +31,8 @@ public class Address {
     @Column(nullable = false)
     private String zipCode;
 
-    private boolean isDefault;
+    @Column(name = "is_default")
+    private boolean defaultAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

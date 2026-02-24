@@ -78,10 +78,10 @@ public class UserService {
         if (user.getAddresses() == null) {
             user.setAddresses(new java.util.ArrayList<>());
         }
-        if (address.isDefault()) {
-            user.getAddresses().forEach(a -> a.setDefault(false));
+        if (address.isDefaultAddress()) {
+            user.getAddresses().forEach(a -> a.setDefaultAddress(false));
         } else if (user.getAddresses().isEmpty()) {
-            address.setDefault(true);
+            address.setDefaultAddress(true);
         }
         user.getAddresses().add(address);
         return userRepository.save(user);
@@ -97,7 +97,7 @@ public class UserService {
     @Transactional
     public User setDefaultAddress(String email, Long addressId) {
         User user = getUserByEmail(email);
-        user.getAddresses().forEach(a -> a.setDefault(a.getId().equals(addressId)));
+        user.getAddresses().forEach(a -> a.setDefaultAddress(a.getId().equals(addressId)));
         return userRepository.save(user);
     }
 }
