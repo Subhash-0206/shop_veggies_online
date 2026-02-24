@@ -1,0 +1,9 @@
+com\veggie\order\config\RestTemplateConfig.class
+com\veggie\order\service\OrderService.class
+com\veggie\order\OrderServiceApplication.class
+com\veggie\order\model\Order$OrderBuilder.class
+com\veggie\order\controller\OrderController.class
+com\veggie\order\model\Order.class
+com\veggie\order\model\OrderItem.class
+com\veggie\order\model\OrderItem$OrderItemBuilder.class
+com\veggie\order\repository\OrderRepository.class

@@ -1,0 +1,6 @@
+com\veggie\product\service\ProductService.class
+com\veggie\product\ProductServiceApplication.class
+com\veggie\product\controller\ProductController.class
+com\veggie\product\repository\ProductRepository.class
+com\veggie\product\model\Product$ProductBuilder.class
+com\veggie\product\model\Product.class

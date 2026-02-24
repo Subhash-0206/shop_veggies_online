@@ -1,0 +1,42 @@
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { LayoutDashboard, Package, ShoppingCart, Users, Plus, Edit, Trash2, CheckCircle, Clock } from 'lucide-react';
+import api from '../api/api';
+
+const AdminDashboard = () => {
+  const [activeTab, setActiveTab] = useState('products');
+  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, [activeTab]);
+
+  const fetchData = async () => {
+    const userJson = localStorage.getItem('user');
+    if (!userJson || userJson === 'undefined') {
+        setLoading(false);
+        return;
+    }
+    
+    setLoading(true);
+    try {
+      if (activeTab === 'products') {
+        const res = await api.get('/products');
+        setProducts(res.data);
+      } else if (activeTab === 'orders') {
+        const res = await api.get('/orders/admin/all');
+        setOrders(res.data);
+      } else if (activeTab === 'users') {
+        const res = await api.get('/users/admin/all');
+        setUsers(res.data);
+      }
+    } catch (err) {
+      console.error('Error fetching admin data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  ...
